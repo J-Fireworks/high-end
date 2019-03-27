@@ -176,6 +176,7 @@
         </div>
         <div class="section" v-for="item in goodsliat" :key="item">
             <div class="main-tit">
+                
                 <h2>{{item.catetitle}}</h2>
                 <p>
                     <a href="/goods/43.html" v-for="it in item.level2catalist" :key="it">{{it.parentTitle}}</a>
@@ -188,7 +189,8 @@
                 <div class="wrap-box">
                     <ul class="img-list">
                         <li v-for="it in item.datas" :key="it">
-                            <a href="#/site/goodsinfo/87" class="">
+                            <!-- <a href="#/site/goodsinfo/87" class=""> -->
+                            <router-link :to="'/detail/'+it.artID">
                                 <div class="img-box">
                                     <img :src="it.img_url">
                                 </div>
@@ -203,7 +205,8 @@
                                         </span>
                                     </p>
                                 </div>
-                            </a>
+                                </router-link>
+                            <!-- </a> -->
                         </li>
                     </ul>
                 </div>
@@ -233,7 +236,7 @@ export default {
         }
     },
     created(){
-        axios.get("http://111.230.232.110:8899/site/goods/gettopdata/goods ")
+        axios.get("http://111.230.232.110:8899/site/goods/gettopdata/goods")
         .then(res=>{
             this.catelist = res.data.message.catelist;
             this.sliderlist = res.data.message.sliderlist;
