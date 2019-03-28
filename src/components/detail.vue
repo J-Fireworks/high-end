@@ -38,25 +38,10 @@
                                 <div class="spec-box">
                                     <dl>
                                         <dt>购买数量</dt>
+                                        
                                         <dd>
                                             <div class="stock-box">
-                                                <div class="el-input-number el-input-number--small">
-                                                    <span role="button" class="el-input-number__decrease is-disabled">
-                                                        <i class="el-icon-minus"></i>
-                                                    </span>
-                                                    <span role="button" class="el-input-number__increase">
-                                                        <i class="el-icon-plus"></i>
-                                                    </span>
-                                                    <div class="el-input el-input--small">
-                                                        <!---->
-                                                        <input autocomplete="off" size="small" type="text" rows="2" max="60"
-                                                            min="1" validateevent="true" class="el-input__inner" role="spinbutton"
-                                                            aria-valuemax="60" aria-valuemin="1" aria-valuenow="1" aria-disabled="false">
-                                                        <!---->
-                                                        <!---->
-                                                        <!---->
-                                                    </div>
-                                                </div>
+                                                <el-input-number v-model="num1" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>
                                             </div>
                                             <span class="stock-txt">
                                                 库存
@@ -152,13 +137,21 @@
                                 <ul class="side-img-list">
                                     <li v-for="item in hotgoodslist" :key="item">
                                         <div class="img-box">
-                                            <a href="#/site/goodsinfo/90" class="">
+                                            <!-- <a href="#/site/goodsinfo/90" class=""> -->
+                                            <router-link :to="'/detail/' + item.id">
                                                 <img :src="item.img_url">
-                                            </a>
+                                             </router-link>
+                                            <!-- </a> -->
                                         </div>
                                         <div class="txt-box">
-                                            <a href="#/site/goodsinfo/90" class="">{{item.title}}</a>
-                                            <span>{{item.add_time | fromatTime}}</span>
+                                            <!-- <a href="#/site/goodsinfo/90" class=""> -->
+                                            <router-link :to="'/detail/' + item.id">
+
+                                                {{item.title}}
+                                             </router-link>
+
+                                            <!-- </a> -->
+                                            <span>{{item.add_time | globalFormatTime('YYYY年MM月DD日')}}</span>
                                         </div>
                                     </li>
                                 </ul>
@@ -175,29 +168,43 @@
 //导入axios
 // import axios from 'axios'
 //导入moment
-import moment from 'moment'
+// import moment from 'moment'
+
 export default {
     name:'detail',
     data(){
         return{
             goodsinfo:{},
             index:1,
-            hotgoodslist:[]
+            hotgoodslist:[],
+            num1:1
         }
     },
-    filters:{
-        fromatTime(value){
-            return moment(value).format("YYYY-MM-DD")
-        }
-    },
-    created() {
-        this.$axios.get(`/site/goods/getgoodsinfo/${this.$route.params.id}`).then(res=>{
+    methods: {
+        getDetail(){
+            this.$axios.get(`/site/goods/getgoodsinfo/${this.$route.params.id}`).then(res=>{
             // console.log(res)
             this.goodsinfo = res.data.message.goodsinfo
             this.hotgoodslist = res.data.message.hotgoodslist
         })
+        }
     },
-    
+    handleChange(){
+        console.log('我变了')
+    },
+    // filters:{
+    //     fromatTime(value){
+    //         return moment(value).format("YYYY-MM-DD")
+    //     }
+    // },
+    created() {
+        this.getDetail()
+    },
+    watch:{
+        $route(value,oldValue){
+            this.getDetail()
+        }
+    }
 }
 </script>
 

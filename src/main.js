@@ -10,8 +10,22 @@ Vue.use(VueRouter)
 //统一设置axois
 import axios from 'axios'
 Vue.prototype.$axios = axios
-
-//设置基地址
+    //导入饿了么ui
+import ElementUI from 'element-ui'
+//导入饿了么ui样式
+import 'element-ui/lib/theme-chalk/index.css'
+// vue插件
+Vue.use(ElementUI)
+    //全局过滤器
+import moment from 'moment'
+Vue.filter('globalFormatTime', function(value, fmtTemplate) {
+        if (fmtTemplate) {
+            return moment(value).format(fmtTemplate)
+        } else {
+            return moment(value).format('YYYY-MM-DD')
+        }
+    })
+    //设置基地址
 axios.defaults.baseURL = 'http://111.230.232.110:8899'
     //导入组件
 import index from './components/index.vue'
